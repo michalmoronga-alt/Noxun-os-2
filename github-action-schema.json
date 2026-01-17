@@ -1,0 +1,65 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GitHub File Access API",
+    "description": "Allows the GPT to read and write files in the specified GitHub repository.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.github.com"
+    }
+  ],
+  "paths": {
+    "/repos/michalmoronga-alt/Noxun-os-2/contents/{path}": {
+      "get": {
+        "summary": "Read file from repository",
+        "operationId": "readFile",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File content returned successfully."
+          }
+        }
+      },
+      "put": {
+        "summary": "Create or update file in repository",
+        "operationId": "writeFile",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": { "type": "string" },
+                  "content": { "type": "string" },
+                  "sha": { "type": "string" }
+                },
+                "required": ["message", "content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "File created or updated successfully." }
+        }
+      }
+    }
+  }
+}
