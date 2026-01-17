@@ -1,0 +1,65 @@
+name: AutoPR
+on:
+  push:
+    branches:
+      - "ag/**"
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  autopr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const core = require('@actions/core');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const head = context.ref.replace('refs/heads/','');
+            const base = 'main';
+
+            if (head === base) {
+              core.info('Head is main, skipping.');
+              return;
+            }
+
+            // Find existing open PR from this head branch
+            const { data: prs } = await github.rest.pulls.list({
+              owner, repo, state: 'open', head: `${owner}:${head}`
+            });
+
+            let pr;
+            if (prs.length > 0) {
+              pr = prs[0];
+              core.info(`PR exists: #${pr.number}`);
+            } else {
+              const title = head.startsWith('ag/')
+                ? `chore: ${head.replace('ag/','')}`
+                : `chore: ${head}`;
+              const body =
+`Auto-created PR for branch \`${head}\`.
+
+ExecSummary: https://github.com/${owner}/${repo}/blob/${head}/AG_REPORTS/latest.md
+
+Checklist:
+- [ ] Open PR Preview link (comment below)
+- [ ] Verify mobile bottom nav + desktop right sidebar
+- [ ] Merge when green`;
+
+              const created = await github.rest.pulls.create({
+                owner, repo, head, base, title, body, maintainer_can_modify: true
+              });
+              pr = created.data;
+              core.info(`Created PR: #${pr.number}`);
+            }
+
+            const previewUrl = `https://${owner}.github.io/${repo}/pr-preview/pr-${pr.number}/`;
+            const reportUrl  = `https://github.com/${owner}/${repo}/blob/${head}/AG_REPORTS/latest.md`;
+
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: pr.number,
+              body: `✅ AutoPR ready\n\n🔗 ExecSummary: ${reportUrl}\n👀 Preview (after PR Preview workflow completes): ${previewUrl}\n\nNext: wait for PR Preview check → open preview → verify nav responsive → merge.`
+            });
