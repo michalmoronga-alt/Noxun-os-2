@@ -23,7 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install --force
       - name: Build
-        run: npm run build
+        run: |
+          export VITE_BASE_PATH="/${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/"
+          npm run build
+          touch dist/.nojekyll
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:
