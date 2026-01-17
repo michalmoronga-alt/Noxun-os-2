@@ -1,0 +1,10 @@
+- [ ] **Scaffold project**: initialise Vite + React + TS + Tailwind + shadcn/ui + PWA, set up basic pages (Today, Orders, Tasks, Calendar), and commit.
+- [ ] **Add domain models**: create schema for orders, process templates, steps, tasks, agreements, purchase orders; migrate database.
+- [ ] **Implement navigation**: bottom tab bar on mobile, right sidebar on desktop; Settings gear opens settings page.
+- [ ] **Drive link handling**: store driveRootFolderId on order; display subfolder links in order detail.
+- [ ] **Default process template**: load default template and clone steps into new orders.
+- [ ] **Order status logic**: derive order status from active process step; add override.
+- [ ] **Task completion**: automatically mark step complete when tasks finished; support manual override.
+- [ ] **Purchase orders**: CRUD purchase orders, link to orders, minimal fields.
+- [ ] **Agreements**: implement structured decisions with approver and timestamp.
+- [ ] **Preview deploy**: set up deployment preview on Cloudflare Pages (or similar).
