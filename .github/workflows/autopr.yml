@@ -1,0 +1,89 @@
+name: AutoPR
+
+on:
+  push:
+    branches:
+      - "ag/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  autopr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-create PR for ag/**
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const head = context.ref.replace('refs/heads/', '');
+            const base = 'main';
+
+            core.info(`AutoPR head=${head} base=${base} owner=${owner} repo=${repo}`);
+
+            if (head === base) {
+              core.info('Head is base branch, skipping.');
+              return;
+            }
+
+            // Find existing open PR from this head branch
+            const prs = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              head: `${owner}:${head}`,
+            });
+
+            let pr;
+            if (prs.data.length > 0) {
+              pr = prs.data[0];
+              core.info(`PR already exists: #${pr.number}`);
+            } else {
+              const title = head.startsWith('ag/')
+                ? `chore: ${head.replace('ag/', '')}`
+                : `chore: ${head}`;
+
+              const body = [
+                `Auto-created PR for branch \`${head}\`.`,
+                ``,
+                `ExecSummary: https://github.com/${owner}/${repo}/blob/${head}/AG_REPORTS/latest.md`,
+                ``,
+                `Checklist:`,
+                `- [ ] Open PR Preview (link in comment below)`,
+                `- [ ] Verify Desktop Sidebar + Mobile Bottom Nav`,
+                `- [ ] Merge when checks are green`,
+              ].join('\n');
+
+              const created = await github.rest.pulls.create({
+                owner,
+                repo,
+                head,
+                base,
+                title,
+                body,
+              });
+
+              pr = created.data;
+              core.info(`Created PR: #${pr.number}`);
+            }
+
+            const previewUrl = `https://${owner}.github.io/${repo}/pr-preview/pr-${pr.number}/`;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pr.number,
+              body: [
+                `✅ AutoPR ready`,
+                ``,
+                `🔗 ExecSummary: https://github.com/${owner}/${repo}/blob/${head}/AG_REPORTS/latest.md`,
+                `👀 Preview (after build): ${previewUrl}`,
+                ``,
+                `Next: open preview, verify UI, then merge.`,
+              ].join('\n'),
+            });
