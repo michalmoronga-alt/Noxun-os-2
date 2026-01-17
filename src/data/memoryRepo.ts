@@ -1,0 +1,104 @@
+
+import type { Repository } from './repo';
+import type { Order, Task, Agreement, ProcessStep } from '../domain/types';
+
+const SEED_ORDERS: Order[] = [
+    {
+        id: 'o1',
+        title: 'Order A',
+        clientName: 'Client X',
+        status: 'in-progress',
+        createdAt: new Date().toISOString(),
+        steps: [
+            { id: 's1', name: 'Preparation', status: 'done' },
+            { id: 's2', name: 'Execution', status: 'pending' },
+        ]
+    },
+    {
+        id: 'o2',
+        title: 'Order B',
+        clientName: 'Client Y',
+        status: 'waiting',
+        createdAt: new Date().toISOString(),
+        steps: [
+            { id: 's3', name: 'Preparation', status: 'pending' },
+        ]
+    },
+    {
+        id: 'o3',
+        title: 'Order C',
+        clientName: 'Client Z',
+        status: 'done',
+        createdAt: new Date().toISOString(),
+        steps: [
+            { id: 's4', name: 'Preparation', status: 'done' },
+            { id: 's5', name: 'Delivery', status: 'done' },
+        ]
+    }
+];
+
+const SEED_TASKS: Task[] = [
+    { id: 't1', title: 'Call Client X', completed: false, orderId: 'o1' },
+    { id: 't2', title: 'Prepare Invoice', completed: true, orderId: 'o3' },
+    { id: 't3', title: 'Buy Materials', completed: false },
+];
+
+const SEED_AGREEMENTS: Agreement[] = [
+    {
+        id: 'a1',
+        title: 'Service Agreement 2026',
+        clientName: 'Client X',
+        dateRange: { od: '2026-01-01', do: '2026-12-31' }
+    }
+];
+
+export class MemoryRepository implements Repository {
+    private orders: Order[] = [...SEED_ORDERS];
+    private tasks: Task[] = [...SEED_TASKS];
+    private agreements: Agreement[] = [...SEED_AGREEMENTS];
+
+    async getOrders(): Promise<Order[]> {
+        return this.orders;
+    }
+
+    async getOrder(id: string): Promise<Order | undefined> {
+        return this.orders.find(o => o.id === id);
+    }
+
+    async upsertOrder(order: Order): Promise<void> {
+        const index = this.orders.findIndex(o => o.id === order.id);
+        if (index >= 0) {
+            this.orders[index] = order;
+        } else {
+            this.orders.push(order);
+        }
+    }
+
+    async getTasks(): Promise<Task[]> {
+        return this.tasks;
+    }
+
+    async addTask(task: Task): Promise<void> {
+        this.tasks.push(task);
+    }
+
+    async toggleTask(id: string): Promise<void> {
+        const task = this.tasks.find(t => t.id === id);
+        if (task) {
+            task.completed = !task.completed;
+        }
+    }
+
+    async getAgreements(): Promise<Agreement[]> {
+        return this.agreements;
+    }
+
+    async addAgreement(agreement: Agreement): Promise<void> {
+        this.agreements.push(agreement);
+    }
+
+    async getSteps(orderId: string): Promise<ProcessStep[]> {
+        const order = this.orders.find(o => o.id === orderId);
+        return order ? order.steps : [];
+    }
+}
