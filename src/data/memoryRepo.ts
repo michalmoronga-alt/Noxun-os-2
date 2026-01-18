@@ -5,44 +5,45 @@ import type { Order, Task, Agreement, ProcessStep } from '../domain/types';
 const SEED_ORDERS: Order[] = [
     {
         id: 'o1',
-        title: 'Order A',
-        clientName: 'Client X',
+        title: 'Inštalácia FVE - Rodinný dom',
+        clientName: 'Ján Novák',
         status: 'in-progress',
         createdAt: new Date().toISOString(),
         dateRange: { od: '2026-01-10', do: '2026-01-20' }, // Current/Active
         steps: [
-            { id: 's1', name: 'Preparation', status: 'done' },
-            { id: 's2', name: 'Execution', status: 'pending' },
+            { id: 's1', name: 'Zameranie', status: 'done' },
+            { id: 's2', name: 'Montáž', status: 'pending' },
+            { id: 's2b', name: 'Revízia', status: 'pending' },
         ]
     },
     {
         id: 'o2',
-        title: 'Order B',
-        clientName: 'Client Y',
+        title: 'Servis klimatizácie',
+        clientName: 'Firma ABC s.r.o.',
         status: 'waiting',
         createdAt: new Date().toISOString(),
         // Future / Waiting
         dateRange: { od: '2026-02-01', do: '2026-02-10' },
         steps: [
-            { id: 's3', name: 'Preparation', status: 'pending' },
+            { id: 's3', name: 'Obhliadka', status: 'pending' },
         ]
     },
     {
         id: 'o3',
-        title: 'Order C',
-        clientName: 'Client Z',
+        title: 'Výmena rozvádzača',
+        clientName: 'Peter Kováč',
         status: 'done', // Done but maybe was due yesterday
         createdAt: new Date().toISOString(),
         dateRange: { od: '2026-01-01', do: '2026-01-15' },
         steps: [
-            { id: 's4', name: 'Preparation', status: 'done' },
-            { id: 's5', name: 'Delivery', status: 'done' },
+            { id: 's4', name: 'Nákup materiálu', status: 'done' },
+            { id: 's5', name: 'Realizácia', status: 'done' },
         ]
     },
     {
         id: 'o4',
-        title: 'Urgently Needed',
-        clientName: 'Client A',
+        title: 'Havarijná oprava - Voda',
+        clientName: 'Bytové družstvo',
         status: 'in-progress',
         createdAt: new Date().toISOString(),
         dateRange: { od: '2025-12-01', do: '2026-01-15' }, // Past due
@@ -51,17 +52,17 @@ const SEED_ORDERS: Order[] = [
 ];
 
 const SEED_TASKS: Task[] = [
-    { id: 't1', title: 'Call Client X', completed: false, orderId: 'o1', tags: ['follow-up'] },
-    { id: 't2', title: 'Prepare Invoice', completed: true, orderId: 'o3' },
-    { id: 't3', title: 'Buy Materials', completed: false, tags: ['OBJEDNAVKA'] },
-    { id: 't4', title: 'Order specific components', completed: false, orderId: 'o2', tags: ['OBJEDNAVKA'] },
+    { id: 't1', title: 'Zavolať klientovi ohľadom termínu', completed: false, orderId: 'o1', tags: ['follow-up'] },
+    { id: 't2', title: 'Vystaviť faktúru', completed: true, orderId: 'o3' },
+    { id: 't3', title: 'Kúpiť ističe', completed: false, tags: ['OBJEDNAVKA'] },
+    { id: 't4', title: 'Objednať náhradné diely', completed: false, orderId: 'o2', tags: ['OBJEDNAVKA'] },
 ];
 
 const SEED_AGREEMENTS: Agreement[] = [
     {
         id: 'a1',
-        title: 'Service Agreement 2026',
-        clientName: 'Client X',
+        title: 'Servisná zmluva 2026',
+        clientName: 'Firma ABC s.r.o.',
         dateRange: { od: '2026-01-01', do: '2026-12-31' }
     }
 ];

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRepository } from '@/data/DataProvider';
 import type { Order } from '@/domain/types';
+import { Link } from 'react-router-dom';
 
 export default function Orders() {
     const repo = useRepository();
@@ -17,9 +18,11 @@ export default function Orders() {
             <p className="text-muted-foreground">Spravované cez repozitár</p>
             <div className="grid gap-4">
                 {orders.map(order => (
-                    <div key={order.id} className="p-4 border rounded-lg shadow-sm">
+                    <div key={order.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-semibold">{order.title}</h3>
+                            <Link to={`/zakazky/${order.id}`} className="font-semibold hover:underline text-lg">
+                                {order.title}
+                            </Link>
                             <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'done' ? 'bg-green-100 text-green-800' :
                                 order.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
                                     'bg-yellow-100 text-yellow-800'
