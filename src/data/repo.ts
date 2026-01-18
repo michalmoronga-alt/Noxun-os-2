@@ -1,5 +1,5 @@
 
-import type { Order, Task, Agreement, ProcessStep } from '../domain/types';
+import type { Order, Task, Agreement, ProcessStep, ProcessTemplate } from '../domain/types';
 
 export interface Repository {
     // Orders
@@ -10,6 +10,7 @@ export interface Repository {
     // Tasks
     getTasks(): Promise<Task[]>;
     addTask(task: Task): Promise<void>;
+    updateTask(task: Task): Promise<void>;
     toggleTask(id: string): Promise<void>;
 
     // Agreements
@@ -18,4 +19,8 @@ export interface Repository {
 
     // Steps (often part of order, but if needed separately)
     getSteps(orderId: string): Promise<ProcessStep[]>;
+
+    // Templates
+    getTemplates(): Promise<ProcessTemplate[]>;
+    saveTemplate(template: ProcessTemplate): Promise<void>;
 }

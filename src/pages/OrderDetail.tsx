@@ -16,6 +16,9 @@ export default function OrderDetail() {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newAgreementTitle, setNewAgreementTitle] = useState('');
 
+    const [addingTaskToStep, setAddingTaskToStep] = useState<string | null>(null);
+    const [stepTaskTitle, setStepTaskTitle] = useState('');
+
     const refreshData = async () => {
         if (!id) return;
         const o = await repo.getOrder(id);
@@ -67,6 +70,22 @@ export default function OrderDetail() {
         refreshData();
     };
 
+    const handleAddStepTask = async (stepId: string) => {
+        if (!stepTaskTitle.trim() || !id) return;
+
+        await repo.addTask({
+            id: `t_${Date.now()}`,
+            title: stepTaskTitle,
+            completed: false,
+            status: 'todo', // Explicitly set status to trigger new logic if needed
+            orderId: id,
+            processStepId: stepId
+        });
+        setStepTaskTitle('');
+        setAddingTaskToStep(null);
+        refreshData();
+    };
+
     if (!id) return <div>Invalid ID</div>;
     if (!order) return <div className="p-4">Načítavam... (alebo zákazka neexistuje)</div>;
 
@@ -107,16 +126,102 @@ export default function OrderDetail() {
                         {order.steps.length === 0 ? (
                             <div className="p-4 text-sm text-gray-500 text-center">Žiadne kroky</div>
                         ) : (
-                            order.steps.map(step => (
-                                <div key={step.id} className="p-3 border-b last:border-0 flex justify-between items-center bg-white">
-                                    <span>{step.name}</span>
-                                    {step.status === 'done' ? (
-                                        <span className="text-green-600 font-bold">✓</span>
-                                    ) : (
-                                        <span className="text-gray-300">○</span>
-                                    )}
-                                </div>
-                            ))
+                            order.steps.map(step => {
+                                const stepTasks = tasks.filter(t => t.processStepId === step.id);
+                                const isAdding = addingTaskToStep === step.id;
+
+                                return (
+                                    <div key={step.id} className="border-b last:border-0 bg-white">
+                                        <div className="p-3 flex justify-between items-center">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-3 h-3 rounded-full ${step.status === 'done' ? 'bg-green-500' :
+                                                    step.status === 'in-progress' ? 'bg-blue-500' :
+                                                        'bg-gray-300'
+                                                    }`} />
+                                                <span className={step.status === 'done' ? 'text-gray-500' : 'font-medium'}>
+                                                    {step.name}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wider ${step.status === 'done' ? 'bg-green-100 text-green-700' :
+                                                        step.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                                                            'bg-gray-100 text-gray-500'
+                                                    }`}>
+                                                    {step.status === 'pending' ? 'Čaká' :
+                                                        step.status === 'in-progress' ? 'Prebieha' :
+                                                            step.status === 'done' ? 'Hotovo' : step.status}
+                                                </span>
+                                                <button
+                                                    onClick={() => setAddingTaskToStep(step.id)}
+                                                    className="text-xs bg-primary/10 hover:bg-primary/20 text-primary px-2 py-1 rounded transition-colors"
+                                                >
+                                                    + Úloha
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Step Tasks */}
+                                        {(stepTasks.length > 0 || isAdding) && (
+                                            <div className="px-3 pb-3 pl-9 space-y-2">
+                                                {stepTasks.map(t => (
+                                                    <div key={t.id} className="flex items-center gap-2 text-sm bg-gray-50 p-2 rounded border border-gray-100">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={t.completed}
+                                                            onChange={() => handleToggleTask(t.id)}
+                                                            className="w-4 h-4 accent-primary cursor-pointer"
+                                                        />
+                                                        <span className={t.completed ? "line-through text-gray-400" : "text-gray-700"}>
+                                                            {t.title}
+                                                        </span>
+                                                        <div className="ml-auto flex gap-1">
+                                                            <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider ${t.status === 'done' ? 'bg-green-50 text-green-600' :
+                                                                t.status === 'in-progress' ? 'bg-blue-50 text-blue-600' :
+                                                                    'bg-gray-100 text-gray-500'
+                                                                }`}>
+                                                                {t.status || (t.completed ? 'DONE' : 'TODO')}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                                {isAdding && (
+                                                    <form
+                                                        onSubmit={(e) => {
+                                                            e.preventDefault();
+                                                            handleAddStepTask(step.id);
+                                                        }}
+                                                        className="flex gap-2 animate-in fade-in slide-in-from-top-1"
+                                                    >
+                                                        <input
+                                                            autoFocus
+                                                            type="text"
+                                                            className="flex-1 text-sm border rounded px-2 py-1"
+                                                            placeholder="Názov úlohy..."
+                                                            value={stepTaskTitle}
+                                                            onChange={e => setStepTaskTitle(e.target.value)}
+                                                            onBlur={() => {
+                                                                // Optional: cancel on blur if empty?
+                                                                // setAddingTaskToStep(null);
+                                                            }}
+                                                        />
+                                                        <button type="submit" className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">
+                                                            OK
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setAddingTaskToStep(null)}
+                                                            className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded"
+                                                        >
+                                                            Zrušiť
+                                                        </button>
+                                                    </form>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })
                         )}
                     </div>
                 </div>
