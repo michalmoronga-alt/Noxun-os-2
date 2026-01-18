@@ -1,19 +1,26 @@
 
 # ExecSummary
-- Implemented **Domain Layer**: `types.ts`, `rules.ts`.
-- Implemented **Data Layer**: `Repository` interface, `MemoryRepository` with seed data (3 orders, tasks, agreements).
-- Implemented **Dependency Injection**: `DataProvider` context and `useRepository` hook.
+- **Merged PR #9** into `main` (Domain/Repo seed).
+- **Started Branch**: `ag/sk-nav-translation`.
+- **Navigation Update**:
+  - Removed "Clients".
+  - Added "Dnes" (Dashboard) as default home using `LayoutDashboard` icon.
+  - Updated Sidebar/BottomNav items to: "Dnes", "Zákazky", "Úlohy", "Kalendár".
+- **Localization (SK)**:
+  - Translated all UI navigation labels and page headers to Slovak.
+  - Updated Routes: `/dnes`, `/zakazky`, `/ulohy`, `/kalendar`, `/nastavenia`.
 - **Refactoring**:
-  - `Orders.tsx`: Displays orders with status badges and steps.
-  - `Tasks.tsx`: Lists tasks with toggle functionality.
-  - `Calendar.tsx`: Lists agreements with date ranges.
-  - `Clients.tsx`: Lists unique clients derived from orders and agreements.
+  - Deleted `Clients.tsx`.
+  - Created `Today.tsx` with a simple "No notifications" message.
+  - Updated `AppShell.tsx` and `App.tsx` routing structure.
 
-## Manual Check Steps
-1. **Orders**: Verify 3 seed orders ("Order A", "Order B", "Order C") and their status colors.
-2. **Tasks**: Check 3 tasks. Toggle a task (e.g., "Call Client X"), navigate to another page and back to confirm the state persists (in-memory).
-3. **Calendar**: Verify "Service Agreement 2026" is visible.
-4. **Clients**: Verify "Client X", "Client Y", "Client Z" are listed.
+## Manual verification steps
+1.  **Home/Dnes**: Navigate to `/` or `/dnes`. Verify header is "Dnes" and message "Vitajte v NOXUN OS...".
+2.  **Navigation**: Check Sidebar (Desktop) and Bottom Nav (Mobile). Labels should be: "Dnes", "Zákazky", "Úlohy", "Kalendár".
+3.  **Zákazky**: Verify header "Zákazky", "Klient:", "Kroky:".
+4.  **Úlohy**: Verify header "Úlohy", "Zákazka:".
+5.  **Kalendár**: Verify header "Kalendár", "Časová os", "Klient:".
+6.  **Nastavenia**: Verify header "Nastavenia" and gear icon link works.
 
 ## CI Status
 - **Lint**: Passing (checked locally)
