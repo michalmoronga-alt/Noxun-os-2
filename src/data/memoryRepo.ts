@@ -9,6 +9,7 @@ const SEED_ORDERS: Order[] = [
         clientName: 'Client X',
         status: 'in-progress',
         createdAt: new Date().toISOString(),
+        dateRange: { od: '2026-01-10', do: '2026-01-20' }, // Current/Active
         steps: [
             { id: 's1', name: 'Preparation', status: 'done' },
             { id: 's2', name: 'Execution', status: 'pending' },
@@ -20,6 +21,8 @@ const SEED_ORDERS: Order[] = [
         clientName: 'Client Y',
         status: 'waiting',
         createdAt: new Date().toISOString(),
+        // Future / Waiting
+        dateRange: { od: '2026-02-01', do: '2026-02-10' },
         steps: [
             { id: 's3', name: 'Preparation', status: 'pending' },
         ]
@@ -28,19 +31,30 @@ const SEED_ORDERS: Order[] = [
         id: 'o3',
         title: 'Order C',
         clientName: 'Client Z',
-        status: 'done',
+        status: 'done', // Done but maybe was due yesterday
         createdAt: new Date().toISOString(),
+        dateRange: { od: '2026-01-01', do: '2026-01-15' },
         steps: [
             { id: 's4', name: 'Preparation', status: 'done' },
             { id: 's5', name: 'Delivery', status: 'done' },
         ]
+    },
+    {
+        id: 'o4',
+        title: 'Urgently Needed',
+        clientName: 'Client A',
+        status: 'in-progress',
+        createdAt: new Date().toISOString(),
+        dateRange: { od: '2025-12-01', do: '2026-01-15' }, // Past due
+        steps: []
     }
 ];
 
 const SEED_TASKS: Task[] = [
-    { id: 't1', title: 'Call Client X', completed: false, orderId: 'o1' },
+    { id: 't1', title: 'Call Client X', completed: false, orderId: 'o1', tags: ['follow-up'] },
     { id: 't2', title: 'Prepare Invoice', completed: true, orderId: 'o3' },
-    { id: 't3', title: 'Buy Materials', completed: false },
+    { id: 't3', title: 'Buy Materials', completed: false, tags: ['OBJEDNAVKA'] },
+    { id: 't4', title: 'Order specific components', completed: false, orderId: 'o2', tags: ['OBJEDNAVKA'] },
 ];
 
 const SEED_AGREEMENTS: Agreement[] = [

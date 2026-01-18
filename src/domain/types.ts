@@ -15,6 +15,7 @@ export interface Order {
     // Derived or stored, but we'll calculate it via rules usually
     status: OrderStatus;
     createdAt: string;
+    dateRange?: DateRange;
 }
 
 export interface Task {
@@ -22,6 +23,7 @@ export interface Task {
     title: string;
     completed: boolean;
     orderId?: string; // Optional link to order
+    tags?: string[];
 }
 
 export interface DateRange {
