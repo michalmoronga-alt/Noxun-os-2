@@ -1,26 +1,25 @@
 
 # ExecSummary
-- **Merged PR #9** into `main` (Domain/Repo seed).
-- **Started Branch**: `ag/sk-nav-translation`.
-- **Navigation Update**:
-  - Removed "Clients".
-  - Added "Dnes" (Dashboard) as default home using `LayoutDashboard` icon.
-  - Updated Sidebar/BottomNav items to: "Dnes", "Zákazky", "Úlohy", "Kalendár".
-- **Localization (SK)**:
-  - Translated all UI navigation labels and page headers to Slovak.
-  - Updated Routes: `/dnes`, `/zakazky`, `/ulohy`, `/kalendar`, `/nastavenia`.
-- **Refactoring**:
-  - Deleted `Clients.tsx`.
-  - Created `Today.tsx` with a simple "No notifications" message.
-  - Updated `AppShell.tsx` and `App.tsx` routing structure.
+- **Merged PR #10** into `main` (SK Navigation).
+- **Started Branch**: `ag/today-dashboard`.
+- **Dashboard Implementation**:
+  - Implemented 4-column layout in `Today.tsx`:
+    - **Dnes**: Orders active today (based on `dateRange`).
+    - **Horí**: Overdue orders.
+    - **Čaká**: Future orders or orders without dates.
+    - **Chýba objednať**: Tasks tagged with `OBJEDNAVKA`.
+  - Added visual cues (color coding) and action buttons ("Otvoriť", "+ Úloha").
+- **Data Model Updates**:
+  - Added `dateRange` to `Order` interface.
+  - Added `tags` to `Task` interface.
+  - Updated `memoryRepo.ts` with new seed data (date ranges, tags) to demonstrate the dashboard features.
 
 ## Manual verification steps
-1.  **Home/Dnes**: Navigate to `/` or `/dnes`. Verify header is "Dnes" and message "Vitajte v NOXUN OS...".
-2.  **Navigation**: Check Sidebar (Desktop) and Bottom Nav (Mobile). Labels should be: "Dnes", "Zákazky", "Úlohy", "Kalendár".
-3.  **Zákazky**: Verify header "Zákazky", "Klient:", "Kroky:".
-4.  **Úlohy**: Verify header "Úlohy", "Zákazka:".
-5.  **Kalendár**: Verify header "Kalendár", "Časová os", "Klient:".
-6.  **Nastavenia**: Verify header "Nastavenia" and gear icon link works.
+1.  **Dnes Column**: Verify "Order A" (Active) appears here. Blue accent.
+2.  **Horí Column**: Verify "Urgently Needed" (Past due) appears here. Red accent.
+3.  **Čaká Column**: Verify "Order B" (Future) appears here. Gray styling.
+4.  **Chýba objednať**: Verify "Buy Materials" and "Order specific..." tasks appear here with Amber styling.
+5.  **Actions**: Click "Otvoriť" button and verify it navigates to `/zakazky` (or logs to console if placeholder).
 
 ## CI Status
 - **Lint**: Passing (checked locally)
