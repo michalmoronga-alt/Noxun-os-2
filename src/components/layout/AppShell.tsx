@@ -1,18 +1,18 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
-    LayoutList,
+    LayoutDashboard,
+    Package,
     CheckSquare,
     CalendarDays,
-    Users,
     Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-    { label: "Orders", path: "/orders", icon: LayoutList },
-    { label: "Tasks", path: "/tasks", icon: CheckSquare },
-    { label: "Calendar", path: "/calendar", icon: CalendarDays },
-    { label: "Clients", path: "/clients", icon: Users },
+    { label: "Dnes", path: "/dnes", icon: LayoutDashboard },
+    { label: "Zákazky", path: "/zakazky", icon: Package },
+    { label: "Úlohy", path: "/ulohy", icon: CheckSquare },
+    { label: "Kalendár", path: "/kalendar", icon: CalendarDays },
 ];
 
 export function AppShell() {
@@ -26,9 +26,9 @@ export function AppShell() {
                     <div className="flex items-center gap-2 font-semibold text-lg">
                         <span>NOXUN OS</span>
                     </div>
-                    <Link to="/settings" className="p-2 hover:bg-accent rounded-full text-muted-foreground transition-colors">
+                    <Link to="/nastavenia" className="p-2 hover:bg-accent rounded-full text-muted-foreground transition-colors">
                         <Settings className="w-5 h-5" />
-                        <span className="sr-only">Settings</span>
+                        <span className="sr-only">Nastavenia</span>
                     </Link>
                 </div>
             </header>
@@ -94,14 +94,14 @@ export function AppShell() {
                 {/* Bottom Actions */}
                 <div className="p-4 border-t">
                     <Link
-                        to="/settings"
+                        to="/nastavenia"
                         className={cn(
                             "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors",
-                            location.pathname === "/settings" && "bg-accent text-accent-foreground"
+                            location.pathname === "/nastavenia" && "bg-accent text-accent-foreground"
                         )}
                     >
                         <Settings className="h-4 w-4" />
-                        Settings
+                        Nastavenia
                     </Link>
                 </div>
             </aside>

@@ -13,8 +13,8 @@ export default function Orders() {
 
     return (
         <div className="p-4 space-y-4">
-            <h1 className="text-2xl font-bold">Orders</h1>
-            <p className="text-muted-foreground">Managed via Repository</p>
+            <h1 className="text-2xl font-bold">Zákazky</h1>
+            <p className="text-muted-foreground">Spravované cez repozitár</p>
             <div className="grid gap-4">
                 {orders.map(order => (
                     <div key={order.id} className="p-4 border rounded-lg shadow-sm">
@@ -27,9 +27,9 @@ export default function Orders() {
                                 {order.status}
                             </span>
                         </div>
-                        <p className="text-sm text-gray-500">Client: {order.clientName}</p>
+                        <p className="text-sm text-gray-500">Klient: {order.clientName}</p>
                         <div className="mt-2 text-xs text-gray-400">
-                            Steps: {order.steps.map(s => s.name).join(', ')}
+                            Kroky: {order.steps.map(s => s.name).join(', ')}
                         </div>
                     </div>
                 ))}

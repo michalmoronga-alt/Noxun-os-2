@@ -18,7 +18,7 @@ export default function Tasks() {
 
     return (
         <div className="p-4 space-y-4">
-            <h1 className="text-2xl font-bold">Tasks</h1>
+            <h1 className="text-2xl font-bold">Úlohy</h1>
             <div className="space-y-2">
                 {tasks.map(task => (
                     <div key={task.id} className="flex items-center gap-2 p-3 border rounded">
@@ -33,7 +33,7 @@ export default function Tasks() {
                         </span>
                         {task.orderId && (
                             <span className="text-xs text-blue-500 ml-auto">
-                                Order: {task.orderId}
+                                Zákazka: {task.orderId}
                             </span>
                         )}
                     </div>
