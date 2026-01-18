@@ -4,6 +4,7 @@ import Orders from "@/pages/Orders";
 import Tasks from "@/pages/Tasks";
 import CalendarModule from "@/pages/Calendar";
 import Today from "@/pages/Today";
+import OrderDetail from "@/pages/OrderDetail";
 import Settings from "@/pages/Settings";
 import './App.css';
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dnes" replace />} />
           <Route path="/dnes" element={<Today />} />
           <Route path="/zakazky" element={<Orders />} />
+          <Route path="/zakazky/:id" element={<OrderDetail />} />
           <Route path="/ulohy" element={<Tasks />} />
           <Route path="/kalendar" element={<CalendarModule />} />
           <Route path="/nastavenia" element={<Settings />} />
