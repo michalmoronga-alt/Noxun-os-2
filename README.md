@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# MindForge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MindForge is a local-first development cockpit for turning ideas into reviewed, approved, and testable development steps.
 
-Currently, two official plugins are available:
+Current product definition:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> MindForge V1 is a personal development cockpit that captures an idea, turns it into an approvable step, keeps the project context, and shows Michal the next reasonable move.
 
-## React Compiler
+MindForge is not being built as a full autonomous AI brain in V1. The V1 focus is practical: reduce context loss, reduce approval friction, and make the development loop easier to control.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Current V1 workflow
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```txt
+Telegram input
+→ AI draft
+→ Approval Preview
+→ Markdown dev package export
+→ AG/Codex implementation
+→ Smoke report
+→ Follow-up when needed
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Current stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Frontend: React / Vite
+- Backend: FastAPI
+- Database: SQLite
+- Input: Telegram bot
+- AI provider: configurable, currently Gemini works
+- Export format: Markdown packages in `docs/dev-tasks/`
+- Runtime mode: local-first on Michal's PC
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Current V1 principles
+
+- Keep V1 local-first.
+- Do not add GitHub API in V1.
+- Do not index the whole `C:\APP DEV` folder yet.
+- Do not add vector DB or full Archivist yet.
+- Keep Telegram as quick input and frontend as the control panel.
+- Use project context packs before asking AI to create build drafts.
+- Human approval remains the gate before implementation.
+- AG/Codex prompts are written in English; UI and Michal-facing communication are in Slovak.
+
+## Current priority
+
+The next main product step is:
+
+```txt
+Approval Preview 2.0 + Context Receipt
 ```
+
+Reason: Michal currently receives only a short Telegram summary and cannot confidently see what exactly he is approving. Approval needs to become a decision panel, not just a binary approve/reject button.
+
+## Documentation map
+
+- `docs/10_WORKING_CONTEXT_AND_ROADMAP.md` — consolidated working context, decisions, roadmap, and future ideas.
+- `docs/11_APPROVAL_PREVIEW_2_SPEC.md` — next build specification for Approval Preview 2.0.
+- `docs/12_DEVELOPMENT_WORKSPACE_SPEC.md` — future Development Workspace / cockpit direction.
+- `docs/13_IDEA_INBOX_AND_ARCHIVIST_LITE.md` — parking lot, recent sparks, Agent Radar, and Lite Archivist direction.
+- `docs/decisions/ADR-0008-mindforge-v1-development-cockpit.md` — product direction decision.
+
+## What not to build yet
+
+Do not spend V1 effort on:
+
+- full autonomous Master Agent,
+- full Archivist with vector memory,
+- GitHub API automation,
+- cloud sync/auth,
+- whole `C:\APP DEV` workspace indexing,
+- voice messages before text workflow is stable,
+- graph view / Obsidian-style bidirectional system.
+
+These remain valid future directions, but only after the development cockpit is usable.
