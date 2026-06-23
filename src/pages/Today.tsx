@@ -88,7 +88,7 @@ export default function Today() {
                                     subtitle={o.clientName}
                                     date={o.dateRange ? `${o.dateRange.od} - ${o.dateRange.do}` : ''}
                                     colorClass="border-l-4 border-l-blue-500"
-                                    onOpen={() => navigate('/zakazky')} // Placeholder link
+                                    onOpen={() => navigate(`/zakazky/${o.id}`)}
                                     onAddTask={() => console.log('Add task to', o.id)}
                                 />
                             ))}
@@ -110,7 +110,7 @@ export default function Today() {
                                     subtitle={o.clientName}
                                     date={o.dateRange ? `do ${o.dateRange.do}` : ''}
                                     colorClass="border-l-4 border-l-red-500 bg-red-50/50"
-                                    onOpen={() => navigate('/zakazky')}
+                                    onOpen={() => navigate(`/zakazky/${o.id}`)}
                                     onAddTask={() => console.log('Add task', o.id)}
                                 />
                             ))}
@@ -131,7 +131,7 @@ export default function Today() {
                                     subtitle={o.clientName}
                                     date={o.dateRange?.od ? `od ${o.dateRange.od}` : ''}
                                     colorClass="border-gray-200"
-                                    onOpen={() => navigate('/zakazky')}
+                                    onOpen={() => navigate(`/zakazky/${o.id}`)}
                                     onAddTask={() => console.log('Add task', o.id)}
                                 />
                             ))}
